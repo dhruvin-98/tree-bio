@@ -1,0 +1,28 @@
+
+generator client {
+  provider = "prisma-client"
+  
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model user {
+  id String @default(cuid()) @id
+  clerkId String @unique
+  email String @unique
+  username String? @unique
+
+  firstName String?
+  lastName String?
+  imageUrl String?
+
+
+  bio String @db.VarChar(500)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+
+}
