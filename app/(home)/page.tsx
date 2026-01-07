@@ -1,13 +1,29 @@
-import { Button } from '@/components/ui/button'
-import { onBoardUser } from '@/modules/auth/actions'
-import { profile } from 'console'
-import Link from 'next/link'
-import React from 'react'
+import { Button } from "@/components/ui/button";
+import { onBoardUser } from "@/modules/auth/actions";
+import ClaimLinkForm from "@/modules/home/components/claim-link-form";
+import { getCurrentUsername } from "@/modules/profile/actions";
 
-const HomePage =async() => {
-  await onBoardUser()
-  return ( 
-     <div className="min-h-screen ">
+
+import Link from "next/link";
+import { redirect } from "next/navigation";
+
+export default async function Home() {
+  const user = await onBoardUser();
+  const profile = await getCurrentUsername();
+  
+
+  if (!user.success) {
+    return redirect("/sign-in");
+  }
+
+ 
+   
+  
+
+ 
+
+  return (
+    <div className="min-h-screen ">
       {/* Header */}
 
       {/* Main Content */}
@@ -31,19 +47,25 @@ const HomePage =async() => {
           {/* CTA Button */}
           <div className="pt-4">
             {
+              user.success && profile?.username && (
                 <Link href="/admin/my-tree">
                   <Button size="lg" className="px-8 py-3 text-lg font-medium cursor-pointer">
                     TreeBio Dashboard
                   </Button>
                 </Link>
-              
+              )
             }
            
           </div>
         </section>
+
+        {/* Claim Link Section */}
+        <section className="pb-16 md:pb-24">
+          <div className="max-w-md mx-auto">
+            <ClaimLinkForm />
+          </div>
+        </section>
       </main>
     </div>
-  )     
+  );
 }
-
-export default HomePage
